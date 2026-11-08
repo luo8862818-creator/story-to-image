@@ -1,5 +1,6 @@
 """Local image task ledger. No network/model/API calls; the host draws images."""
 import argparse
+from collections import deque
 from contextlib import contextmanager
 import hashlib
 import json
@@ -9,6 +10,7 @@ import re
 import sqlite3
 import sys
 import tempfile
+import time
 import uuid
 
 from PIL import Image
@@ -25,7 +27,8 @@ CREATE TABLE batches(id TEXT PRIMARY KEY,limit_calls INTEGER NOT NULL CHECK(limi
 CREATE TABLE batch_items(batch TEXT NOT NULL REFERENCES batches(id),task TEXT NOT NULL REFERENCES tasks(id),
  position INTEGER NOT NULL,PRIMARY KEY(batch,task));
 CREATE TABLE jobs(token TEXT PRIMARY KEY,task TEXT NOT NULL REFERENCES tasks(id),batch TEXT NOT NULL REFERENCES batches(id),
- phase TEXT NOT NULL CHECK(phase IN ('dispatched','uncertain','completed','failed')),refs TEXT NOT NULL,note TEXT);
+ phase TEXT NOT NULL CHECK(phase IN ('dispatched','uncertain','completed','failed')),refs TEXT NOT NULL,note TEXT,
+ dispatched_at REAL,completed_at REAL);
 CREATE INDEX jobs_batch ON jobs(batch);
 CREATE TABLE requests(id TEXT PRIMARY KEY,definition TEXT NOT NULL,result TEXT NOT NULL);
 INSERT INTO meta VALUES('schema','story-to-image-2');
@@ -71,9 +74,20 @@ class Project:
         self.db.row_factory = sqlite3.Row
         self.db.execute('PRAGMA foreign_keys=ON')
         self.db.execute('PRAGMA synchronous=FULL')
-        if self.db.execute("SELECT value FROM meta WHERE key='schema'").fetchone()[0] != 'story-to-image-2':
+        try:
+            schema = self.db.execute("SELECT value FROM meta WHERE key='schema'").fetchone()
+            if not schema or schema[0] != 'story-to-image-2':
+                raise ValueError('Unsupported ledger schema; preserve it')
+            columns = {r[1] for r in self.db.execute('PRAGMA table_info(jobs)')}
+            if not {'dispatched_at', 'completed_at'} <= columns:
+                with self.transaction():
+                    columns = {r[1] for r in self.db.execute('PRAGMA table_info(jobs)')}
+                    for name in ('dispatched_at', 'completed_at'):
+                        if name not in columns:
+                            self.db.execute('ALTER TABLE jobs ADD COLUMN ' + name + ' REAL')
+        except BaseException:
             self.close()
-            raise ValueError('Unsupported ledger schema; preserve it')
+            raise
 
     @classmethod
     def init(cls, root):
@@ -167,20 +181,24 @@ class Project:
                 normalized.append(item)
             graph = {k: json.loads(v['refs']) for k, v in existing.items()}
             graph.update({i['id']: i['refs'] for i in normalized})
-            visited, visiting = set(), set()
-            def walk(node):
-                if node not in graph:
-                    raise ValueError('Unknown reference task: ' + node)
-                if node in visiting:
-                    raise ValueError('Cyclic task dependencies')
-                if node in visited:
-                    return
-                visiting.add(node)
-                for ref in graph[node]:
-                    walk(ref)
-                visiting.remove(node); visited.add(node)
-            for node in graph:
-                walk(node)
+            # Iterative O(V+E) validation: long story chains must not hit Python recursion limits.
+            degree = {node: len(refs) for node, refs in graph.items()}
+            children = {node: [] for node in graph}
+            for node, refs in graph.items():
+                for ref in refs:
+                    if ref not in graph:
+                        raise ValueError('Unknown reference task: ' + ref)
+                    children[ref].append(node)
+            ready = deque(node for node in graph if degree[node] == 0)
+            visited = 0
+            while ready:
+                node = ready.popleft(); visited += 1
+                for child in children[node]:
+                    degree[child] -= 1
+                    if degree[child] == 0:
+                        ready.append(child)
+            if visited != len(graph):
+                raise ValueError('Cyclic task dependencies')
             for item in normalized:
                 self.db.execute('INSERT INTO tasks(id,filename,mode,prompt,refs,inputs,definition,family,version,state) VALUES(?,?,?,?,?,?,?,?,?,?)',
                     (item['id'], item['filename'], item['mode'], item['prompt'], encode(item['refs']), encode(item['inputs']),
@@ -219,6 +237,8 @@ class Project:
 
     def next(self, tool_ready=False):
         with self.transaction():
+            if self.paused():
+                return {'action': 'paused', 'active': self.active(), 'new_calls': 0}
             active = self.active()
             if active:
                 task = self.task(active['task'])
@@ -233,6 +253,9 @@ class Project:
                 return {'action': 'batch_limit', 'used': used, 'limit': batch['limit_calls'], 'new_calls': 0}
             blocked = []
             candidates = self.db.execute("SELECT t.* FROM batch_items b JOIN tasks t ON t.id=b.task WHERE b.batch=? AND t.state IN ('pending','needs_review','failed') ORDER BY b.position", (batch['id'],)).fetchall()
+            issue = next((r for r in candidates if r['state'] in ('needs_review', 'failed')), None)
+            if issue:
+                return {'action': 'needs_review', 'id': issue['id'], 'new_calls': 0}
             for candidate in candidates:
                 task = dict(candidate)
                 task_id = task['id']
@@ -261,7 +284,7 @@ class Project:
                 if self.output(task).exists():
                     raise ValueError('Output exists; recover original result without another call')
                 token = uuid.uuid4().hex
-                self.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,NULL)', (token, task_id, batch['id'], 'dispatched', encode(records)))
+                self.db.execute('INSERT INTO jobs(token,task,batch,phase,refs,note,dispatched_at) VALUES(?,?,?,?,?,NULL,?)', (token, task_id, batch['id'], 'dispatched', encode(records), time.time()))
                 self.db.execute("UPDATE tasks SET state='dispatched' WHERE id=?", (task_id,))
                 return {'action': 'call_image_tool', 'id': task_id, 'token': token, 'mode': task['mode'],
                         'prompt': task['prompt'], 'references': records, 'filename': task['filename'],
@@ -310,7 +333,7 @@ class Project:
                 self.db.execute("UPDATE tasks SET state='completed',sha256=?,width=?,height=?,note=? WHERE id=?",
                                 (digest, width, height, note, task_id))
                 if not external:
-                    self.db.execute("UPDATE jobs SET phase='completed' WHERE token=?", (token,))
+                    self.db.execute("UPDATE jobs SET phase='completed',completed_at=? WHERE token=?", (time.time(), token))
                 return {'action': 'saved', 'id': task_id, 'file': str(target), 'sha256': digest,
                         'width': width, 'height': height, 'new_calls': 0}
             finally:
@@ -403,6 +426,17 @@ class Project:
             self.db.execute('UPDATE tasks SET state=?,note=? WHERE id=?', ('completed' if passed else 'needs_review', note, task_id))
             return {'action': 'reviewed', 'id': task_id, 'passed': passed, 'new_calls': 0}
 
+    def paused(self):
+        row = self.db.execute("SELECT value FROM meta WHERE key='paused'").fetchone()
+        return bool(row and row[0] == '1')
+
+    def pause(self, paused=True, note=''):
+        with self.transaction():
+            self.db.execute("INSERT OR REPLACE INTO meta VALUES('paused',?)", ('1' if paused else '0',))
+            self.db.execute("INSERT OR REPLACE INTO meta VALUES('pause_note',?)", (note,))
+            return {'action': 'paused' if paused else 'resumed', 'new_calls': 0,
+                    'note': 'Only future dispatches are paused; the native service may still finish an accepted job.'}
+
     def status(self, verify=False, aspect_ratio=None):
         tasks = [dict(r) for r in self.db.execute('SELECT id,filename,state,parent,family,version,sha256,width,height,note FROM tasks ORDER BY rowid')]
         if aspect_ratio:
@@ -421,16 +455,27 @@ class Project:
         batches = [dict(r, used=self.used(r['id'])) for r in self.db.execute('SELECT id,limit_calls FROM batches ORDER BY rowid')]
         active = self.active()
         current = self.db.execute("SELECT value FROM meta WHERE key='current_batch'").fetchone()
+        timings = [dict(r) for r in self.db.execute('SELECT task,token,phase,dispatched_at,completed_at FROM jobs ORDER BY rowid')]
+        for timing in timings:
+            timing['dispatch_to_save_seconds'] = (round(timing['completed_at'] - timing['dispatched_at'], 3)
+                if timing['completed_at'] is not None and timing['dispatched_at'] is not None else None)
         return {'action': 'status', 'tasks': tasks, 'batches': batches,
+                'paused': self.paused(), 'timings': timings,
                 'current_batch': current[0] if current else None,
                 'active': {k: active[k] for k in ('task', 'token', 'phase', 'batch')} if active else None, 'new_calls': 0}
 
 
 def main(argv=None):
+    # Stable machine-readable JSON on Windows, regardless of terminal code page.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--project', required=True)
     sub = parser.add_subparsers(dest='action', required=True)
     sub.add_parser('init')
+    p = sub.add_parser('pause'); p.add_argument('--note', default='User requested pause')
+    sub.add_parser('resume')
     p = sub.add_parser('import'); p.add_argument('--plan', required=True)
     p = sub.add_parser('batch'); p.add_argument('--id', required=True); p.add_argument('--count', type=int, required=True); p.add_argument('--items', nargs='+'); p.add_argument('--authorized', action='store_true')
     p = sub.add_parser('next'); p.add_argument('--tool-ready', action='store_true')
@@ -449,6 +494,8 @@ def main(argv=None):
     try:
         project = Project.init(args.project) if args.action == 'init' else Project(args.project)
         if args.action == 'init': result = {'action': 'ready', 'project': str(project.root)}
+        elif args.action == 'pause': result = project.pause(True, args.note)
+        elif args.action == 'resume': result = project.pause(False)
         elif args.action == 'import': result = project.import_plan(json.loads(Path(args.plan).read_text(encoding='utf-8-sig')))
         elif args.action == 'batch': result = project.batch(args.id, args.count, args.items, args.authorized)
         elif args.action == 'next': result = project.next(args.tool_ready)

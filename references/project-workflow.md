@@ -49,3 +49,25 @@ python scripts/project.py --project projects/my-story next --tool-ready
 脚本有明确画幅时，交付前运行status --verify --aspect-ratio 9:16（替换为实际要求）。按已保存的真实像素检查，允许1像素舍入；不符时会报告aspect_ratio_match=false，不自动裁剪、补边或多生一次。原生工具不一定严格输出提示词中的画幅，发现不符用review fail保存问题，不能称尺寸已达标。
 
 .gitignore排除实际项目、图片、视频、输入ZIP、环境和数据库；静态example-story文本demo保留。Git只排除未跟踪文件：若用户过去已跟踪过素材，先检查git ls-files，不要以为新增.gitignore会自动从历史删掉它们。没有用户明确授权不删除远程历史或强制推送。
+
+
+## 暂停与时间
+
+```text
+python scripts/project.py --project projects/my-story pause --note "用户暂停"
+python scripts/project.py --project projects/my-story resume
+```
+
+暂停位保存在SQLite meta，重新打开仍生效。暂停只阻止新的next，不取消已接收的原生调用；complete可以在暂停时保存晚到的真实结果。resume不改token、任务或批次计数，未知job仍recover_original。
+
+jobs新增dispatched_at/completed_at；打开旧版本账本时通过事务增列，旧任务、用量与未知token不变，旧记录时间显示null，不编造耗时。status.timings中的dispatch_to_save_seconds是派发到保存时间，包含助手/用户停顿及工具交接；原生调用耗时要在宿主另行测量。
+
+## CSV工具
+
+```text
+python scripts/csv_tools.py input/任务.csv --output input/任务_UTF8.csv
+python scripts/csv_tools.py input/任务.csv --in-place
+python scripts/csv_tools.py input/脚本.zip --in-place
+```
+
+in-place首次保留.before-encoding-fix.bak，不覆盖旧备份；新输出目标已存在则拒绝。检查全部CSV行列和值后原子替换，不执行CSV或ZIP内容。默认自动识别，必要时--encoding指定原编码；不把错误替换符静默写回。

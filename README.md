@@ -1,4 +1,4 @@
-# Story to Image 2.0.0
+# Story to Image 2.1.0
 
 完整的Codex生图项目：Python管理任务与SQLite进度，ChatGPT/Codex原生工具生成图片，不接第三方或OpenAI图片API，不要求API Key。支持脚本原文件名、每次只生成N张、重新打开续作、指定版本修改与重新生成。
 
@@ -25,7 +25,7 @@ macOS/Linux使用python3与.venv/bin/python。唯一外部依赖Pillow用于确�
 ## 目录
 
 - AGENTS.md、SKILL.md、.agents/：Codex项目规则及随仓库携带的技能发现入口。
-- scripts/project.py：唯一任务管理入口，不调用图片API。
+- scripts/project.py：任务管理入口，不调用图片API；csv_tools.py负责CSV/ZIP内CSV编码修复。
 - demo/plan.example.json：可复制到新项目的任务样例；projects/example-story保留旧故事静态demo，不是新账本项目。
 - projects/<name>/：source、plan.json、state.sqlite3、output原图，默认忽略Git提交。
 - tests/test_project.py：离线状态测试，不调用生图服务。
@@ -39,3 +39,6 @@ macOS/Linux使用python3与.venv/bin/python。唯一外部依赖Pillow用于确�
 ```
 
 不需要构建发布包即可使用。上传源码前先用git ls-files审查文件，原生生图仍在本地运行。测试完成情况见[验证记录](验证记录.md)。
+
+
+2.1.0补充：持久暂停/恢复、同批任一待验收项先阻止新派发、1200项依赖链迭代检查、旧账本兼容计时、稳定UTF-8 JSON输出、Excel兼容CSV修复。工程边界与实际耗时见验证记录；不保证原生服务固定速度。生成资料、CSV备份和数据库不提交GitHub。

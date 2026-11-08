@@ -36,3 +36,6 @@ projects/*
 **/progress.json*
 **/.progress.lock
 **/.project.lock
+
+# Recovery backups remain local
+*.bak

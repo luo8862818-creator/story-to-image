@@ -246,5 +246,70 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(self.p.used('batch-1'), 1)
         with self.assertRaises(ValueError): self.p.status(aspect_ratio='0:16')
 
+    def test_pause_reopen_resume_does_not_reset_limit(self):
+        self.p.import_plan(self.doc); self.p.batch('pause-test', 2, authorized=True)
+        self.p.pause(True, 'User stopped before drawing')
+        self.reopen()
+        self.assertEqual(self.p.next(True)['action'], 'paused')
+        self.assertEqual(self.p.used('pause-test'), 0)
+        self.p.pause(False)
+        first = self.p.next(True)
+        self.p.pause(True, 'User stopped during accepted drawing')
+        self.finish(first) # Late result may still be saved while paused.
+        self.assertEqual(self.p.next(True)['action'], 'paused')
+        self.p.pause(False)
+        self.finish(self.p.next(True))
+        self.assertEqual(self.p.next(True)['action'], 'batch_limit')
+        self.assertTrue(all(t['dispatch_to_save_seconds'] is not None for t in self.p.status()['timings']))
+
+    def test_pause_resume_unknown_job_never_resubmits(self):
+        first = self.begin()
+        self.p.mark('A', first['token'], 'Unknown native result')
+        self.p.pause(True); self.reopen(); self.p.pause(False)
+        recovered = self.p.next(True)
+        self.assertEqual(recovered['action'], 'recover_original')
+        self.assertEqual(recovered['token'], first['token'])
+        self.assertEqual(self.p.used('batch-1'), 1)
+
+    def test_later_review_issue_blocks_earlier_newly_ready_item(self):
+        self.doc = {'tasks': [self.item('EXT', mode='external'), self.item('A', refs=['EXT']), self.item('B')]}
+        first = self.begin(count=3)
+        self.assertEqual(first['id'], 'B')
+        self.finish(first); self.p.review('B', False, 'Needs user review')
+        self.p.complete('EXT', self.image, external=True, note='Synthetic extracted frame')
+        result = self.p.next(True)
+        self.assertEqual(result['action'], 'needs_review')
+        self.assertEqual(self.p.used('batch-1'), 1)
+
+    def test_legacy_timing_migration_preserves_existing_ledger(self):
+        first = self.begin()
+        old_path = self.root/'legacy'; old_path.mkdir()
+        db = sqlite3.connect(old_path/'state.sqlite3')
+        old_schema = module.SCHEMA.replace(',\n dispatched_at REAL,completed_at REAL', '')
+        db.executescript(old_schema)
+        for table in ('tasks','batches','batch_items','jobs','requests'):
+            columns = [r[1] for r in db.execute('PRAGMA table_info('+table+')')]
+            rows = self.p.db.execute('SELECT '+','.join(columns)+' FROM '+table).fetchall()
+            db.executemany('INSERT INTO '+table+'('+','.join(columns)+') VALUES('+','.join('?' for _ in columns)+')', rows)
+        db.commit(); db.close()
+        legacy = Project(old_path)
+        try:
+            self.assertEqual(legacy.next(True)['token'], first['token'])
+            self.assertEqual(legacy.used('batch-1'), 1)
+            self.assertIsNone(legacy.status()['timings'][0]['dispatch_to_save_seconds'])
+        finally: legacy.close()
+
+    def test_long_story_dependency_chain_does_not_use_recursion(self):
+        tasks = [self.item('TASK'+str(i), refs=['TASK'+str(i+1)] if i<1199 else []) for i in range(1200)]
+        self.assertEqual(self.p.import_plan({'tasks':tasks})['added'],1200)
+
+    def test_cli_json_is_utf8_even_with_ascii_terminal_encoding(self):
+        receipt = self.begin()
+        self.p.complete(receipt['id'],self.image,receipt['token'],note='中文文件与状态')
+        env=dict(os.environ,PYTHONIOENCODING='ascii')
+        result=subprocess.run([sys.executable,str(SCRIPT),'--project',str(self.path),'status'],capture_output=True,env=env)
+        self.assertEqual(result.returncode,0,result.stderr)
+        self.assertEqual(json.loads(result.stdout)['tasks'][0]['note'],'中文文件与状态')
+
 
 if __name__ == '__main__': unittest.main()
