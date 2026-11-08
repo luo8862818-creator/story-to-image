@@ -1,0 +1,22 @@
+{
+  "characters": [
+    {
+      "id": "character_001",
+      "name": "角色甲",
+      "description": "填写该角色外观，以用户原始参考图为最高依据。",
+      "master_image": "references/characters/character_001/master.png",
+      "reference_images": [],
+      "fixed_features": [
+        "面部特征、体型、主色与原始参考图一致"
+      ],
+      "clothing": {
+        "default": "填写固定服装；剧情换装时增加明确版本"
+      },
+      "allowed_changes": [
+        "动作",
+        "表情"
+      ],
+      "notes": "不得将其他角色的参考图用于本角色。"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "provider": "codex_imagegen",
+  "model": "tool-managed",
+  "default_shot_count": 1,
+  "batch_size": 5,
+  "sequential_review": true,
+  "aspect_ratio": "16:9",
+  "width": 1280,
+  "height": 720,
+  "resize_mode": "pad",
+  "style": "3D卡通",
+  "color_style": "统一柔和色彩",
+  "material_style": "统一细腻材质",
+  "lighting_tone": "柔和电影光线，按剧情记录变化",
+  "character_rendering": "遵循原始角色参考，跨镜头固定渲染方式",
+  "max_reference_images": 5,
+  "max_total_generations": 40,
+  "max_attempts_per_item": 3,
+  "output_root": "output"
+}

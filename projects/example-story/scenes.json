@@ -1,0 +1,20 @@
+{
+  "scenes": [
+    {
+      "id": "scene_001",
+      "name": "场景一",
+      "description": "填写固定环境、空间结构和陈设。",
+      "reference_image": null,
+      "fixed_layout": [
+        "填写门窗与家具的相对位置"
+      ],
+      "fixed_props": [
+        "填写固定陈设"
+      ],
+      "lighting": "填写时间与光源方向",
+      "allowed_changes": [
+        "与剧情一致的活动道具状态"
+      ]
+    }
+  ]
+}

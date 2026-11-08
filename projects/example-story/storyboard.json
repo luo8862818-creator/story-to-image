@@ -1,0 +1,642 @@
+{
+  "story_id": "example-story",
+  "title": "失物归还",
+  "analysis": {
+    "setup": "角色甲发现一封遗落的信。",
+    "development": "角色甲寻找失主。",
+    "conflict": "失主已经离开，角色甲一度失望。",
+    "emotion_changes": "好奇、犹豫、焦急、安心。",
+    "ending": "角色甲把信交还失主，得到感谢。",
+    "characters": [
+      "character_001"
+    ],
+    "scenes": [
+      "scene_001"
+    ],
+    "key_props": [
+      "letter_001"
+    ]
+  },
+  "shots": [
+    {
+      "id": 1,
+      "name": "镜头01",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲注意到桌边的一封信。",
+      "action": "角色甲注意到桌边的一封信。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "全景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "桌边",
+          "holder": null,
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲注意到桌边的一封信。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_01.png"
+    },
+    {
+      "id": 2,
+      "name": "镜头02",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲停下脚步，低头观察信件。",
+      "action": "角色甲停下脚步，低头观察信件。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "中景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "桌边",
+          "holder": null,
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲停下脚步，低头观察信件。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_02.png"
+    },
+    {
+      "id": 3,
+      "name": "镜头03",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲靠近桌边，确认四周无人。",
+      "action": "角色甲靠近桌边，确认四周无人。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "近景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "桌边",
+          "holder": null,
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲靠近桌边，确认四周无人。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_03.png"
+    },
+    {
+      "id": 4,
+      "name": "镜头04",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲小心拿起信封。",
+      "action": "角色甲小心拿起信封。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "特写",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲小心拿起信封。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_04.png"
+    },
+    {
+      "id": 5,
+      "name": "镜头05",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲看见信封上的姓名标记，但不展示可读文字。",
+      "action": "角色甲看见信封上的姓名标记，但不展示可读文字。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "全景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲看见信封上的姓名标记，但不展示可读文字。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_05.png"
+    },
+    {
+      "id": 6,
+      "name": "镜头06",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲回想刚才离开的人。",
+      "action": "角色甲回想刚才离开的人。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "中景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲回想刚才离开的人。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_06.png"
+    },
+    {
+      "id": 7,
+      "name": "镜头07",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲望向场景出口，露出犹豫表情。",
+      "action": "角色甲望向场景出口，露出犹豫表情。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "近景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲望向场景出口，露出犹豫表情。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_07.png"
+    },
+    {
+      "id": 8,
+      "name": "镜头08",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲决定寻找失主。",
+      "action": "角色甲决定寻找失主。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "特写",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲决定寻找失主。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_08.png"
+    },
+    {
+      "id": 9,
+      "name": "镜头09",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲沿固定通道前进，手中握住信封。",
+      "action": "角色甲沿固定通道前进，手中握住信封。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "全景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲沿固定通道前进，手中握住信封。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_09.png"
+    },
+    {
+      "id": 10,
+      "name": "镜头10",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲在通道转角停下并倾听。",
+      "action": "角色甲在通道转角停下并倾听。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "中景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲在通道转角停下并倾听。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_10.png"
+    },
+    {
+      "id": 11,
+      "name": "镜头11",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲发现前方已经无人，表情失落。",
+      "action": "角色甲发现前方已经无人，表情失落。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "近景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲发现前方已经无人，表情失落。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_11.png"
+    },
+    {
+      "id": 12,
+      "name": "镜头12",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲短暂思考，重新鼓起勇气。",
+      "action": "角色甲短暂思考，重新鼓起勇气。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "特写",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲短暂思考，重新鼓起勇气。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_12.png"
+    },
+    {
+      "id": 13,
+      "name": "镜头13",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲注意到远处有人返回的动静，镜头只表现其反应。",
+      "action": "角色甲注意到远处有人返回的动静，镜头只表现其反应。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "全景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲注意到远处有人返回的动静，镜头只表现其反应。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_13.png"
+    },
+    {
+      "id": 14,
+      "name": "镜头14",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲举起信封示意。",
+      "action": "角色甲举起信封示意。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "中景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲举起信封示意。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_14.png"
+    },
+    {
+      "id": 15,
+      "name": "镜头15",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲等待对方走近，保持信件在手中。",
+      "action": "角色甲等待对方走近，保持信件在手中。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "近景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲等待对方走近，保持信件在手中。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_15.png"
+    },
+    {
+      "id": 16,
+      "name": "镜头16",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲确认对方是失主，表情放松。",
+      "action": "角色甲确认对方是失主，表情放松。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "特写",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲确认对方是失主，表情放松。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_16.png"
+    },
+    {
+      "id": 17,
+      "name": "镜头17",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲向镜头外的失主递出信件，失主不入画。",
+      "action": "角色甲向镜头外的失主递出信件，失主不入画。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "全景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "按当前剧情明确手中或桌面位置",
+          "holder": "character_001",
+          "state": "纸张完整，无无故出现或消失"
+        }
+      ],
+      "prompt": "角色甲向镜头外的失主递出信件，失主不入画。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_17.png"
+    },
+    {
+      "id": 18,
+      "name": "镜头18",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "信件被镜头外失主接走，角色甲松开手。",
+      "action": "信件被镜头外失主接走，角色甲松开手。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "中景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "画外失主处",
+          "holder": null,
+          "state": "已归还，不再出现在角色甲手中"
+        }
+      ],
+      "prompt": "信件被镜头外失主接走，角色甲松开手。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_18.png"
+    },
+    {
+      "id": 19,
+      "name": "镜头19",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲因获得感谢而微笑点头。",
+      "action": "角色甲因获得感谢而微笑点头。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "近景",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "画外失主处",
+          "holder": null,
+          "state": "已归还，不再出现在角色甲手中"
+        }
+      ],
+      "prompt": "角色甲因获得感谢而微笑点头。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_19.png"
+    },
+    {
+      "id": 20,
+      "name": "镜头20",
+      "character_ids": [
+        "character_001"
+      ],
+      "scene_id": "scene_001",
+      "costumes": {
+        "character_001": "default"
+      },
+      "plot": "角色甲回到原先通道，露出安心神情，故事结束。",
+      "action": "角色甲回到原先通道，露出安心神情，故事结束。",
+      "expression": "按当前剧情表现自然情绪，保持固定外观。",
+      "shot_size": "特写",
+      "camera_angle": "平视，保持既定空间轴线",
+      "composition": "主体清晰，保留动作空间",
+      "lighting": "沿用场景固定光线，保持时间连续",
+      "props": [
+        {
+          "id": "letter_001",
+          "position": "画外失主处",
+          "holder": null,
+          "state": "已归还，不再出现在角色甲手中"
+        }
+      ],
+      "prompt": "角色甲回到原先通道，露出安心神情，故事结束。。严格沿用角色原始参考及已锁定场景。",
+      "continuity": [
+        "保持角色服装、环境布局和信件外观一致；前后镜头动作衔接。"
+      ],
+      "output": "shot_20.png"
+    }
+  ]
+}

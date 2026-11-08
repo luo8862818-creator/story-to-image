@@ -1,0 +1,38 @@
+# Runtime environment and private client data
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.tmp
+*.log
+state.sqlite3*
+output/
+input/
+source/
+.work/
+releases/
+# Generated media and input archives never belong in the source repository.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.avif
+*.bmp
+*.tif
+*.tiff
+*.mp4
+*.mov
+*.mp3
+*.wav
+*.zip
+*.sqlite
+*.sqlite3
+*.db
+projects/*
+!projects/example-story/
+# Legacy records are never uploaded
+**/progress.json*
+**/.progress.lock
+**/.project.lock
